@@ -18,7 +18,6 @@ Shop Manager is a Flutter-based mobile application designed for shop owners.
 - Android Studio
 
 ## Created By
-
-SM Soma
+Sidratul Muntaha
 Compose
 Write to Sidratul Muntaha
