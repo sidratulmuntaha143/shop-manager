@@ -1,16 +1,24 @@
-# soma
+# Shop Manager
 
-A new Flutter project.
+Shop Manager is a Flutter-based mobile application designed for shop owners.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Add products
+- Manage product prices
+- Manage product categories
+- Track product quantity and stock
+- View total products
+- Simple and user-friendly interface
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Dart
+- Flutter
+- Android Studio
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Created By
+
+SM Soma
+Compose
+Write to Sidratul Muntaha
