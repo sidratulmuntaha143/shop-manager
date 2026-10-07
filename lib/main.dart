@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soma/shopp.dart';
+import 'package:soma/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const shop(),
+      home: const login(),
+
+
 
     );
   }
