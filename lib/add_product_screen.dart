@@ -9,8 +9,11 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  List<Map<String,dynamic>>products=[];
+
   final productNameController =
       TextEditingController();
+  int? editingIndex;
   final priceNameController =
       TextEditingController();
   final quantityNmeController =
@@ -19,10 +22,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
       TextEditingController();
 
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
       appBar: AppBar(
         title: Text('Add Product'),
       ),
@@ -48,7 +51,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               controller: priceNameController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'price',
+                labelText: 'Price',
                 hintText: 'Enter product price',
                 border: OutlineInputBorder(),
                 prefixIcon: const
@@ -75,7 +78,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
             SizedBox(height: 15),
             TextField(
               controller: categoryNameController,
-              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Category',
                 hintText: 'Enter category',
@@ -92,15 +94,43 @@ SizedBox(width: 300,
   height: 55,
   child: ElevatedButton.icon(
     onPressed: () {
-      if(productNameController.text.isEmpty){
+      if(productNameController.text.isEmpty ||
+      priceNameController.text.isEmpty ||
+          quantityNmeController.text.isEmpty ||
+      categoryNameController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill in all fields'),),);
         return;
       }
+      final price=
+      double.tryParse(priceNameController.text);
+      final quantity =
+      double.tryParse(quantityNmeController.text);
+      if(price==null || quantity== null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Enter valid price and quantity'),
+          ),
+        );
+        
+        return;
+      }
+      final totalPrice = price * quantity;
+      setState(() {
+        products.add({
+         'name':productNameController.text,
+         'price':price,
+         'quantity':quantity,
+         'category':categoryNameController.text,
+         'total':totalPrice,
+        });
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
            SnackBar(
             content: Text(
                 'Product:${productNameController.text}/n'
               'Price:${priceNameController.text}/n'
                     'Quantity:${quantityNmeController.text}/n'
+                'Total Price:$totalPrice\n'
                 'Category:${categoryNameController.text}',
 
             ),
@@ -134,7 +164,72 @@ SizedBox(width: 300,
 
   ),
 
-)
+),
+            SizedBox(height: 20),
+            Expanded(
+                child:ListView.builder(
+                    itemCount: products.length,
+                itemBuilder:(context,index){
+                      final product =products[index];
+
+                      return Card(
+                        child: ListTile(
+                          title: Text(product['name']),
+
+                          subtitle: Text(
+                              'Price: ${product['price']} tk/kg\n'
+                                  'Quantity:${product['quantity']}kg\n'
+                                  'Total:${product['total']} tk',
+                          ),
+                          isThreeLine: true,
+
+                          trailing:Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon:const Icon(
+                              Icons.edit_outlined,
+                          ),
+                                onPressed: (){
+                                  setState(() {
+                                    editingIndex= index;
+                                    productNameController.text=product['name'];
+                                    priceNameController.text=product['price'].toString();
+                                    quantityNmeController.text=product['quantity'].toString();
+                                    categoryNameController.text=product['category'].toString();
+                                  });
+
+                                },
+                              ),
+                              IconButton(
+                                  icon:const Icon(Icons.delete_outline,
+                                  color: Colors.red,
+                                  ),
+                                  onPressed:(){
+                                    setState(() {
+                                      products.removeAt(index);
+                                    });
+                      },)
+                            ],
+                          )
+                        ),
+                      );
+                }
+                )),
+            Padding(
+                padding: const EdgeInsets.all(12),
+            child: Text(
+                'Grand Total:${products.fold<double>(0,
+                    (sum,product)=>sum+(product['total']as double),
+                )} tk',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepOrange,
+
+              ),
+            ),
+            )
               ],
 
         ),
